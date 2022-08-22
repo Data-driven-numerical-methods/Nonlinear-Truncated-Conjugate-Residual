@@ -1,9 +1,9 @@
 clear all; close all; clc
 % Load Dataset
 
-n = 1000;
+n = 100;
 A = randn(n, n)+0.1*eye(n);
-A = A'*A +0.1*eye(n);
+A = A'*A + 0.1*eye(n);
 b = randn(n,1);
 stepsize=1;
 n = size(A,1);

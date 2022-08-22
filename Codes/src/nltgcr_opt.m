@@ -60,8 +60,8 @@ for it =1:itmax
         k = k+1;
         tau = dot(Ar,AP(:,k));
         p = p-tau*P(:,k);
-       
-        Ar = imag(FF(sol-ep*r*imagi)/ep);
+%         Ar = imag(FF(sol-ep*r*imagi)/ep);
+        Ar = Ar-tau* AP(:,k);
         %%---------- update u (last column of current Hess. matrix)
         if (k == i2), break; end
     end

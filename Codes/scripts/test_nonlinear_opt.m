@@ -1,7 +1,7 @@
 clear all
-fun = @rosenbrockwithgrad;
-x0 = [2; 1];
-
+fun = @myfun2;
+x0 = [5; 5];
+x0 = [15;15];
 options = optimoptions('fminunc','Algorithm','quasi-newton','SpecifyObjectiveGradient',true);
 options.Display = 'iter';
 [x, fval, exitflag, output] = fminunc(fun,x0,options);
@@ -9,7 +9,7 @@ sol = x;
 % fun = @rosenbrockwithgrad; sol = ones(2,1);
 
 
-lb = 2; tol = 1e-6; itmax = 100; restart = 5;
+lb = 2; tol = 1e-6; itmax = 30; restart = 2;
 
 [x_2,histout,costdata, history] = ntrust_CTK(x0,fun,tol,itmax,1d-14);
 
@@ -19,7 +19,7 @@ alg_list = {'ntrust','nlTGCR'};
 iter_hist = {history,history2 }; fval_hist = {histout(:,2),FVAL};
 draw_convergence_sequence(fun,sol, alg_list,iter_hist,fval_hist);
 
-% figure(2)
-% semilogy(histout(:,2),'r');
-% hold on 
-% semilogy(FVAL,'b');
+figure(2)
+semilogy(histout(:,2),'r');
+hold on 
+semilogy(FVAL,'b');
