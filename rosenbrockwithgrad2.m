@@ -1,4 +1,4 @@
-function [f,g,H] = rosenbrockwithgrad(x)
+function [f,g,H] = rosenbrockwithgrad2(x)
 % Calculate objective f
 f = 100*(x(2) - x(1)^2)^2 + (1-x(1))^2;
 

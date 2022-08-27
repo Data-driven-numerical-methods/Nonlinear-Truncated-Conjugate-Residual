@@ -1,5 +1,5 @@
 clear all
-fun = @rosenbrockwithgrad;
+fun = @rosenbrockwithgrad2;
 x0 = [-1.5; 1];
 
 options = optimoptions('fminunc','Algorithm','quasi-newton','SpecifyObjectiveGradient',true);
@@ -9,7 +9,7 @@ sol = x;
 % fun = @rosenbrockwithgrad; sol = ones(2,1);
 
 
-lb = 1; tol = 1e-6; itmax = 50; restart = 2;
+lb = 2; tol = 1e-6; itmax = 50; restart = 5;
 
 [x_2,histout,costdata, history] = ntrust_CTK(x0,fun,tol,itmax,1d-14);
 
