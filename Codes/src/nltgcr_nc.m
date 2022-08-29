@@ -1,4 +1,4 @@
-function [sol,FVAL, history] = nltgcr_opt(fun,sol,lb,tol,itmax, restart)
+function [sol,FVAL, history] = nltgcr_nc(fun,sol,lb,tol,itmax, restart)
 %     To minimize this function with the gradient provided, modify
 %     the function myfun so the gradient is the second output argument:
 %        function [f,g] = fun(x)
@@ -52,13 +52,21 @@ for it =1:itmax
 %     disp(P)
 %     sprintf('This is alph')
 %     disp(alph)
-    sprintf('This is residual check.')
-    resv = imag(FF(sol+ep*(P * alph)*imagi)/ep);
-    res = norm(FF(sol) + resv)/norm(FF(sol));
-    disp(res)
-    if (res > 0.99)
+%     sprintf('This is residual check.')
+%     resv = imag(FF(sol+ep*(P * alph)*imagi)/ep);
+%     res = norm(FF(sol) + resv)/norm(FF(sol));
+%     disp(res)
+       H = Hessian(sol);
+      [U,D] = eig(H);
+      sprintf('This is eigenvalue')
+      disp(D(1,1))
+    if (D(1,1) < 0)
 %         sol = sol + normrnd(1,res)*P * alph;
-         sol = sol - Hessian(sol)\FF(sol);
+        
+%          sol = sol - Hessian(sol)\FF(sol);
+         sol = sol + U(:,1);% + normrnd(0, 0.5, [2,1]);
+         sprintf('This is norm of descent dir.')
+         disp(norm(U(:,1))/norm(sol))
     else 
          sol = sol + P * alph;
     end

@@ -1,4 +1,4 @@
-function [sol,FVAL, history] = nltgcr_opt(fun,sol,lb,tol,itmax, restart)
+function [sol,FVAL, history] = nltgcr_base(fun,sol,lb,tol,itmax, restart)
 %     To minimize this function with the gradient provided, modify
 %     the function myfun so the gradient is the second output argument:
 %        function [f,g] = fun(x)
@@ -52,16 +52,9 @@ for it =1:itmax
 %     disp(P)
 %     sprintf('This is alph')
 %     disp(alph)
-    sprintf('This is residual check.')
-    resv = imag(FF(sol+ep*(P * alph)*imagi)/ep);
-    res = norm(FF(sol) + resv)/norm(FF(sol));
-    disp(res)
-    if (res > 0.99)
-%         sol = sol + normrnd(1,res)*P * alph;
-         sol = sol - Hessian(sol)\FF(sol);
-    else 
+
          sol = sol + P * alph;
-    end
+   
    
    
     [fun_val, r]  = fun(sol);
@@ -108,13 +101,13 @@ for it =1:itmax
         %%--------------------initial residual vector and norm 
         r  = FF(sol);
         Ar = imag(FF(sol-ep*r*imagi)/ep);
-%         sprintf('This is directional derivative')
-% %          Ar = Ar/norm(Ar);
+%        sprintf('This is directional derivative')
+%          Ar = Ar/norm(Ar);
 %         disp(norm(FF(sol-ep*r*imagi)))
 %         Ar = (FF(sol-ep*r) - r)/ep;
         t  = norm(Ar);
-%         sprintf('This is vnorm')
-%         disp(t)
+        sprintf('This is vnorm')
+        disp(t)
         p  = r;
     end
     %%-------------------- truncate subspace  
@@ -124,11 +117,10 @@ for it =1:itmax
     t = 1.0 / t;
     AP(:,i2) = t*Ar;
     P(:,i2) = p*t;
+    sprintf('This is pnorm')
+    norm(p*t)
 end
     function grad = FF(x) % gets the gradient of anonymous function fun
         [~,grad,~] = fun(x); 
-    end
-    function H = Hessian(x) % gets the gradient of anonymous function fun
-        [~,~,H] = fun(x); 
     end
 end
