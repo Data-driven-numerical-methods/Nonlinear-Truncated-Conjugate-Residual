@@ -1,17 +1,16 @@
 clear all
-fun = @myfun2;
-x0 = [5; 5];
-x0 = [15;15];
+fun = @rosenbrockwithgrad; sol = ones(1,1);
+
+x0 = [-2;3];
 options = optimoptions('fminunc','Algorithm','quasi-newton','SpecifyObjectiveGradient',true);
 options.Display = 'iter';
 [x, fval, exitflag, output] = fminunc(fun,x0,options);
 sol = x;
-% fun = @rosenbrockwithgrad; sol = ones(2,1);
 
 
-lb = 2; tol = 1e-6; itmax = 30; restart = 2;
+lb = 2; tol = 1e-6; itmax = 1000; restart = 100;
 
-[x_2,histout,costdata, history] = ntrust_CTK(x0,fun,tol,itmax,1d-14);
+[x_2,histout,costdata, history] = ntrust_CTK(x0,fun,tol,itmax,1e-14);
 
 
 [x_3,FVAL, history2] = nltgcr_opt(fun,x0,lb,tol,itmax, restart);

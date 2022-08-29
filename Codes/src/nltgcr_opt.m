@@ -17,7 +17,7 @@ tol1 = tol*rho;
 % ep = epsf*norm(sol)/rho;
 %  Ar = (FF(sol-ep*r) - r)/ep;
 %% --------------Here I use complex diff
-ep = 1d-12;
+ep = 1e-8;
 imagi= sqrt(-1);
 Ar = imag(FF(sol-ep*r*imagi)/ep);
 t = norm(Ar);
@@ -44,6 +44,9 @@ for it =1:itmax
     sol = sol + P * alph;
     
     [fun_val, r]  = fun(sol);
+ 
+
+
     rho = norm(r);
     
     FVAL = [FVAL; fun_val];
@@ -78,6 +81,7 @@ for it =1:itmax
         AP = zeros(n,lb);
         %%--------------------initial residual vector and norm 
         r  = FF(sol);
+        
         Ar = imag(FF(sol-ep*r*imagi)/ep);
         t  = norm(Ar);
         p  = r;
