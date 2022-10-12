@@ -17,7 +17,7 @@ problem = linearsys(A, b, stepsize);
 F = @(x) problem.grad(x);
 problem.sol_opt = x_opt;
 %%-------------------- set some params
-itmax = n-1;
+itmax = n;
 x0  = x00;
 k= 0;
 %%-------------------- nltgcr2 
@@ -108,7 +108,7 @@ interval = 10;
 %% It depicts distance to the correct solution as a function of iteration. 
 
 
-figure(1)
+f1 = figure(1)
 start = 1;
 semilogy(fval1(start:end,1),fval1(start:end,2), '-o', 'color',green,'linewidth',2,'MarkerSize',10,'MarkerIndices', 1:interval:length(fval1))
 hold on

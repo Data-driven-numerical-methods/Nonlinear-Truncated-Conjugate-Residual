@@ -1,24 +1,23 @@
-function [sol, fval, cost, P,AP]= nltgcr2(FF,sol,lb,tol,itmax, problem, restart, epsf, v)
-%% function [sol, res, cost, P,AP]= nltgcr2(FF,sol,lb,tol,itmax, problem, restart)  
-%% NOTEs: lb defines number of vectors kept - [symmetric case lb == 2]
-%%        restart defines restart dimension -- re restart every restart steps
-%%        problem now contains sol_opt
-%%-------------------- initialize
-%  sol_opt = problem.sol_opt;
-
-mom = 0;
+function [sol,FVAL, history] = nltgcr_opt(fun,sol,lb,tol,itmax, restart)
+%     To minimize this function with the gradient provided, modify
+%     the function myfun so the gradient is the second output argument:
+%        function [f,g] = fun(x)
+%         f = sin(x) + 3;
+%         g = cos(x);
+format long
+history = [];
 n = length(sol); 
 %%-------------------- define P and AP to contain zero columns
 P  = zeros(n,lb);
 AP = zeros(n,lb);
 %%--------------------get initial residual vector and norm 
-r = FF(sol);         %% y - A*sol;
+r = FF(sol);         
 rho = norm(r);
 tol1 = tol*rho; 
-%%-------------------- Ar + normalize    FF = b-Ax --> 
 % ep = epsf*norm(sol)/rho;
 %  Ar = (FF(sol-ep*r) - r)/ep;
-ep = 1e-15;
+%% --------------Here I use complex diff
+ep = 1d-12;
 imagi= sqrt(-1);
 Ar = imag(FF(sol-ep*r*imagi)/ep);
 t = norm(Ar);
@@ -26,10 +25,7 @@ t = 1.0 / t;
 P(:,1) = t * r;
 AP(:,1) = t*Ar;
 it = 0;
-fval = [1,problem.cost(sol)];
-cost = 0;
-cost(1) = rho;
-rr0 = rho;
+FVAL = [fun(sol)];
 %%
 fprintf(1,' it %d  rho %10.3e \n', it,rho);
 if (rho <= 0.0)
@@ -40,24 +36,20 @@ end
 %% i2 points to current column in P, AP. Cycling storage used 
 i2= 1;
 i = 1;
+fprintf('   Iteration    fval       grad_norm\n');
 for it =1:itmax 
-
+    history = [history sol];
     alph = AP'*r;
+%     disp(AP)
+    sol = sol + P * alph;
     
-    mom = -P * alph + v * mom;
-    sol = sol - mom;
-    r  = FF(sol);
-    
-    %    r = r -alph*AP(:,i2);
-    %%## NOTE: ALTERNATIVE    r defined as r := r -alph*AP(:,j) --> one less feval
-    %% but not stable + not good theoretical support for this. 
+    [fun_val, r]  = fun(sol);
     rho = norm(r);
-    if mod(it, 1) ==0
-       cost = problem.cost(sol);
-       fval = [fval;[it,cost]];
-       fprintf(1,' it %d  distance to optimal %10.3e \n', it, cost);
-    end
+    
+    FVAL = [FVAL; fun_val];
+    fprintf('   %5d    %10.3e    %10.3e\n', it, fun_val, rho);
     Ar = imag(FF(sol-ep*r*imagi)/ep);
+    disp(FF(sol))
     %% || Ar || / ep  ~ || FF(u+ep*r)- FF(u) || 
     %%--------------------orthonormnalize  Ap's
     p  = r;
@@ -67,7 +59,6 @@ for it =1:itmax
         if (k  ==  lb), k=0; end
         k = k+1;
         tau = dot(Ar,AP(:,k));
-        %     disp(tau)
         p = p-tau*P(:,k);
 %         Ar = imag(FF(sol-ep*r*imagi)/ep);
         Ar = Ar-tau* AP(:,k);
@@ -87,7 +78,6 @@ for it =1:itmax
         AP = zeros(n,lb);
         %%--------------------initial residual vector and norm 
         r  = FF(sol);
-        mom = 0;
         Ar = imag(FF(sol-ep*r*imagi)/ep);
         t  = norm(Ar);
         p  = r;
@@ -99,4 +89,8 @@ for it =1:itmax
     t = 1.0 / t;
     AP(:,i2) = t*Ar;
     P(:,i2) = p*t;
+end
+    function grad = FF(x) % gets the gradient of anonymous function fun
+        [~,grad] = fun(x); 
+    end
 end

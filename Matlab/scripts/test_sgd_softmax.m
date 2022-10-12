@@ -33,7 +33,7 @@ k= 0;
 %%-------------------- nltgcr2 
 disp('testing nltgcr')
 tol = 1.e-06; 
-lb = 1; restart =1;
+lb = 2; restart = 4;
 tic
 epsf = 1e-2;
 [sol1, fval1, acc1, ~, ~]= nltgcr3(F,x00,lb,tol,itmax, problem, restart, epsf,0);
@@ -42,7 +42,7 @@ t1 = toc;
 
 %%-------------------- nltgcr2 
 disp('testing nltgcr')
-lb = 10; restart = 50;
+lb = 3; restart = 10;
 tic
 [sol2, fval2, acc2, ~, ~]= nltgcr3(F,x00,lb,tol,itmax, problem, restart, epsf,0.0);
 toc

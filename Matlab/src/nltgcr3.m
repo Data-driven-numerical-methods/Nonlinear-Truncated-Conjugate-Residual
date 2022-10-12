@@ -36,13 +36,20 @@ Ar = imag(FF(sol-ep*r*imagi)/ep);
  i2= 1;
  i = 1;
  for it =1:itmax 
+    if epsf ==1
+        alph = AP'*r;
+        %% if v > 0, it's momentum
+        mom = -P * alph + v * mom;
+        sol = sol - mom;
+        r  = FF(sol);
+    else
 
-    alph = AP'*r;
-    %% if v > 0, it's momentum
-    mom = -P * alph + v * mom;
-    sol = sol - mom;
-    r  = FF(sol);
-  
+      % This is the original version: 
+        alph = dot(r, AP(:,i2));
+        sol = sol + alph * P(:,i2);
+        % r  = FF(sol);
+        r = r -alph * AP(:,i2);
+    end
 %    r = r -alph*AP(:,i2);
    %%## NOTE: ALTERNATIVE    r defined as r := r -alph*AP(:,j) --> one less feval
    %% but not stable + not good theoretical support for this. 

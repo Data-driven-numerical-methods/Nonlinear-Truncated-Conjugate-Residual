@@ -1,0 +1,7 @@
+**/*.pkl
+**/*.mat
+**/*.png
+**/*.pyc
+_pycache_
+cifar-10-batches-mat
+cora
