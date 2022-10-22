@@ -106,7 +106,7 @@ w =  combine(model)
 sum_G = sum(v.numel() for _, v in G_dict.items())
 assert(len(w) ==sum_G)
 d = len(w)
-lb= 1
+lb= 5
 device = 'cuda'
 P = torch.zeros((d, lb), requires_grad=False).to(device)
 AP = torch.zeros((d,lb), requires_grad=False).to(device)
@@ -143,6 +143,7 @@ for epoch in range(opt.n_epochs):
         w = w + dire
         reload(w)
     r = FF(features, adj, labels)
+
     with torch.no_grad():
         rho = torch.norm(r)
         w1 = w-ep*r
@@ -173,21 +174,14 @@ for epoch in range(opt.n_epochs):
     t = 1.0/t
     AP[:,i2-1] = t*Ar
     P[:,i2-1] = t*p
-    
-    
-    # loss_train = F.nll_loss(output[idx_train], labels[idx_train])
-    # acc_train = accuracy(output[idx_train], labels[idx_train])
-    # loss_train.backward()
-    # optimizer.step()
-
     with torch.no_grad():
         model.eval()
         output = model(features, adj)
         loss_train = F.nll_loss(output[idx_train], labels[idx_train])
         acc_val = accuracy(output[idx_val], labels[idx_val])
     print(f'[Epoch {epoch+1:04d}/{opt.n_epochs}]'
-          f'[Validation accuracy: {acc_val.item():.4f}]'
-          f'[Time: {time.time() - t:.4f}s]')
+          f'[Train Loss: {loss_train.item():.4f}]'
+          f'[Validation accuracy: {acc_val.item():.4f}]')
     loss_list.append(loss_train.item())
     val_acc_list.append(acc_val.item())
     

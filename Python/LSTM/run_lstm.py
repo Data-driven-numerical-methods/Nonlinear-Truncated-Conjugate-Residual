@@ -90,6 +90,8 @@ num_layers = 1
 num_classes = 1
 for e in range(10):
     lstm = LSTM(num_classes, input_size, hidden_size, num_layers)
+    pytorch_total_params = sum(p.numel() for p in lstm.parameters())
+    print(pytorch_total_params)
     criterion = torch.nn.MSELoss()    # mean-squared error for regression
     # optimizer = torch.optim.Adam(lstm.parameters(), lr=learning_rate)
     # optimizer = torch.optim.SGD(lstm.parameters(), lr=learning_rate)

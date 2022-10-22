@@ -10,7 +10,6 @@ import torch.optim as optim
 import csv
 from torchvision import datasets, transforms
 from torch.optim.lr_scheduler import StepLR
-from tensorboardX import SummaryWriter
 import pickle
 
 
@@ -117,7 +116,7 @@ if __name__ == '__main__':
         transforms.ToTensor(),
         transforms.Normalize((0.1307,), (0.3081,))
         ])
-    dataset1 = datasets.MNIST('./data', train=True, download=False,
+    dataset1 = datasets.MNIST('./data', train=True, download=True,
                        transform=transform)
     dataset2 = datasets.MNIST('./data', train=False,
                        transform=transform)
@@ -125,6 +124,7 @@ if __name__ == '__main__':
     test_loader = torch.utils.data.DataLoader(dataset2, **test_kwargs)
 
     model = Net().to(device)
+
     # optimizer = optim.SGD(model.parameters(), lr=args.lr)
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
     # optimizer = torch.optim.SGD(model.parameters(), lr=0.1, momentum=0.9,nesterov=True)

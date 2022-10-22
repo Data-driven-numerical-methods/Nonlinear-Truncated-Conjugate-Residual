@@ -158,7 +158,6 @@ if __name__ == '__main__':
     torch.manual_seed(3)
     model = torch.nn.DataParallel(resnet.__dict__[args.arch]())
     model.cuda()
-
     # optionally resume from a checkpoint
     if args.resume:
         if os.path.isfile(args.resume):

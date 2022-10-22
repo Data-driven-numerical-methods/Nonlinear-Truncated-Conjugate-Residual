@@ -2,6 +2,8 @@
 **/*.mat
 **/*.png
 **/*.pyc
+**/*.csv
+**/*.gz
 _pycache_
 cifar-10-batches-mat
 cora

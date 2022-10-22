@@ -3,8 +3,6 @@ function [sol, fval, cost, P,AP]= nltgcr2(FF,sol,lb,tol,itmax, problem, restart,
 %% NOTEs: lb defines number of vectors kept - [symmetric case lb == 2]
 %%        restart defines restart dimension -- re restart every restart steps
 %%        problem now contains sol_opt
-%%-------------------- initialize
-%  sol_opt = problem.sol_opt;
 
 mom = 0;
 n = length(sol); 
@@ -15,10 +13,8 @@ AP = zeros(n,lb);
 r = FF(sol);         %% y - A*sol;
 rho = norm(r);
 tol1 = tol*rho; 
-%%-------------------- Ar + normalize    FF = b-Ax --> 
-% ep = epsf*norm(sol)/rho;
-%  Ar = (FF(sol-ep*r) - r)/ep;
-ep = 1e-15;
+
+ep = 1e-8;
 imagi= sqrt(-1);
 Ar = imag(FF(sol-ep*r*imagi)/ep);
 t = norm(Ar);
@@ -41,19 +37,21 @@ end
 i2= 1;
 i = 1;
 for it =1:itmax 
-    % This is the Neurips version: 
     alph = AP'*r;
-    
+    % Momentum
     mom = -P * alph + v * mom;
+    % Update
     sol = sol - mom;
+
     r  = FF(sol);
-    % This is the original version: 
-%         alph = dot(r, AP(:,i2));
-%         sol = sol + alph * P(:,i2);
-%         % r  = FF(sol);
-%         r = r -alph * AP(:,i2);
-    %%## NOTE: ALTERNATIVE    r defined as r := r -alph*AP(:,j) --> one less feval
-    %% but not stable + not good theoretical support for this. 
+    % This is the efficient version: 
+    % NOTE: ALTERNATIVE  r defined as r := r -alph*AP(:,j) --> one less feval
+    % but not good theoretical support for this. 
+%     alph = dot(r, AP(:,i2));
+%     sol = sol + alph * P(:,i2);
+%     % r  = FF(sol);
+%     r = r -alph * AP(:,i2);
+
     rho = norm(r);
     if mod(it, 1) ==0
        cost = problem.cost(sol);
@@ -70,9 +68,7 @@ for it =1:itmax
         if (k  ==  lb), k=0; end
         k = k+1;
         tau = dot(Ar,AP(:,k));
-        %     disp(tau)
         p = p-tau*P(:,k);
-%         Ar = imag(FF(sol-ep*r*imagi)/ep);
         Ar = Ar-tau* AP(:,k);
         %%---------- update u (last column of current Hess. matrix)
         if (k == i2), break; end
