@@ -1,7 +1,7 @@
 function [sol,varargout] = nltgcr_linear(sol,Problem,params)
 %% Nonlinear Truncated GCR w/ linear update
 %
-% function [sol, varargout] = nltgcr_adaptive(sol,Problem,params)
+% function [sol, varargout] = nltgcr_linear(sol,Problem,params)
 %
 % inputs:
 %        sol     = initial iterate

@@ -16,6 +16,8 @@ function [sol,varargout] = nltgcr_adaptive(sol,Problem,params)
 %           c        = control parameter for Armijo-Goldstein condition
 %                      (default: 0.001)
 %           stepsize = initial stepsize for line search (default: 1.0)
+%           theta    = cosine distance to switch linear and nonlinear
+%                      update (default: 0.01)
 %
 % output:
 %        sol       = solution
@@ -68,6 +70,12 @@ if ~isfield(params, 'stepsize') %--- initial stepsize in line search
     stepsize = 1.0;
 else
     stepsize = params.stepsize;
+end
+
+if ~isfield(params, 'theta') %--- initial stepsize in line search
+    theta = 0.01;
+else
+    theta = params.theta;
 end
 
 %%-------------------- extract functions
@@ -154,7 +162,7 @@ for it =1:itmax
     if ~lin_cond %--- runing in nonlinear mode
         r_lin = r - lam*AP*alph;
         dist = 1 - r_tmp'*r_lin/rho/norm(r_lin);
-        if dist < 0.01
+        if dist < theta
             lin_cond = true;
             lin_step = it;
             fprintf('change to linear update\n')
@@ -164,7 +172,7 @@ for it =1:itmax
     if lin_cond && mod(it-lin_step,10) == 0 
         r_nl = -FF(sol_tmp); nfe = nfe + 1;
         dist = 1 - r_tmp'*r_nl/rho/norm(r_nl);
-        if dist > 0.01
+        if dist > theta
             lin_cond = false;
             restart_cond = true;
             fprintf('change back to nonlinear update\n')
