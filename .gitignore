@@ -7,3 +7,9 @@
 _pycache_
 cifar-10-batches-mat
 cora
+/Python/assets
+/Python/cresults
+/Python/checkpoint
+/Python/data
+/Python/files
+/Python/results
