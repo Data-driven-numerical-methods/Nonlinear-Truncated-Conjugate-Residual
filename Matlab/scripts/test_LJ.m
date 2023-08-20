@@ -22,7 +22,6 @@ Problem = LJ(N);
 
 %% ------ main solve
 %--- starting point (in flat vector)
-%x_init = particle_generator(lattice, L, N, dim, unit_cells, unit_power, unit_size);
 load('xinit_pert');
 x0 = reshape(x_init,[N*dim,1]);
 
