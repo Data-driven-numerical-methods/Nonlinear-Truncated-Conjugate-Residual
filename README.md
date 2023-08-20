@@ -5,7 +5,7 @@ Under Review in SIAM Journal On Optimization
 ## Abstract: 
 This paper develops a new class of nonlinear acceleration algorithms based on extending conjugate residual-type procedures from linear to nonlinear equations. The main algorithm has strong similarities with Anderson acceleration as well as with inexact Newton methods - depending on which variant is implemented. We prove theoretically and verify experimentally, on a variety of problems from simulation experiments to deep learning applications, that our method is a powerful accelerated iterative algorithm.
 
-## Matlab_SIMAX:
+## Matlab:
 Usage:
 
 - To run the code, run `run_me_first.m` first. To reproduce the experiments in Figure 5.1-5.3 of the paper, go to `scripts` folder.
