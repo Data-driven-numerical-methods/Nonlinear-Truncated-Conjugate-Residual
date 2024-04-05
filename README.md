@@ -1,6 +1,6 @@
 # Nonlinear-Tructated-GCR
 Optimization, Iterative Algorithm, Numerical Analysis
-Under Review in SIAM Journal On Matrix Analysis and Applications
+Accepted in SIAM Journal On Matrix Analysis and Applications
 
 ## Abstract: 
 This paper develops a new class of nonlinear acceleration algorithms based on extending conjugate residual-type procedures from linear to nonlinear equations. The main algorithm has strong similarities with Anderson acceleration as well as with inexact Newton methods - depending on which variant is implemented. We prove theoretically and verify experimentally, on a variety of problems from simulation experiments to deep learning applications, that our method is a powerful accelerated iterative algorithm.
