@@ -16,6 +16,7 @@ function [sol,varargout] = nltgcr_base(sol, Problem, params)
 %           c        = control parameter for Armijo-Goldstein condition
 %                      (default: 0.001)
 %           stepsize = initial stepsize for line search (default: 1.0)
+%           safeguard= threshold for auto-restart (default: 1.e+3)
 %
 % output:
 %        sol       = solution
@@ -69,6 +70,12 @@ else
     stepsize = params.stepsize;
 end
 
+if ~isfield(params, 'safeguard')
+    safeguard = 1.e+3;
+else
+    safeguard = params.safeguard;
+end
+
 %%-------------------- extract functions
 FF = @(x) Problem.grad(x);
 fun = @(x) Problem.cost(x);
@@ -83,6 +90,7 @@ n = length(sol);
 %%-------------------- define P and AP to contain zero columns
 P  = zeros(n,lb);
 AP = zeros(n,lb);
+xrec = zeros(lb,1);
 %%--------------------get initial residual vector and norm 
 r = -FF(sol);   nfe = nfe + 1;
 rho = norm(r);
@@ -95,6 +103,7 @@ t = norm(Ar);
 t = 1.0 / t;
 P(:,1) = t * r;
 AP(:,1) = t*Ar;
+xrec(1) = t * norm(p,'inf');
 it = 0;
 prevf = FVAL;				%
 fprintf(1,' ** it %d  rho %10.3e \n', it,rho);
@@ -148,6 +157,7 @@ for it =1:itmax
     fprintf('   %5d    %10.3e    %10.3e\n', it, fun_val, rho);
 %%--------------------orthonormnalize  Ap's
     p  = r;
+    w  = norm(p,'inf');
     Ar = imag(FF(sol+ep*p*imagi)/ep);  nfe = nfe + 1;
     vv = Ar;
     if (i <= lb), k = 0; else, k=i2; end
@@ -158,10 +168,12 @@ for it =1:itmax
         tau = dot(Ar,AP(:,k));
         p = p-tau*P(:,k);
 	    Ar = Ar - tau*AP(:,k);
+        w = w + abs(tau)*xrec(k);
 %%---------- update u (last column of current Hess. matrix)
         if (k == i2), break; end
     end
     t = norm(Ar);
+    w = w / t;
 
 %%-------------------- Now  Ar==Ap. If   Ap == 0 can't advance         
     if (t < rho*1.e-16)
@@ -173,17 +185,19 @@ for it =1:itmax
         disp('lack of progress -----> stop')
         break
     end
-
 %%-------------------- we restart every `restart' iterations
-    if (mod(it,restart) == 0 || t<1.e-13*rho)  
+    if (mod(it,restart) == 0 || w > safeguard)  
+      fprintf('restart\n')
       i2 = 0;
       i  = 0;
       P  = zeros(n,lb);
       AP = zeros(n,lb);
+      xrec = zeros(lb,1);
 %%--------------------initial residual vector and norm
       p = r;
       Ar = vv;
       t  = norm(Ar);
+      w = norm(p,'inf') / t;
     end
 %%-------------------- truncate subspace  
     if (i2  == lb), i2=0; end
@@ -192,6 +206,7 @@ for it =1:itmax
     t = 1.0 / t;
     AP(:,i2) = t*Ar;
     P(:,i2) = p*t;
+    xrec(i2) = w;
 end
 
 nout = max(nargout,1)-1;

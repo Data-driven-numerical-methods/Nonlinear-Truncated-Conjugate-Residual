@@ -112,22 +112,14 @@ blue        = [0 0.5 1];
 green       = [0 0.6 0.3];
 red         = [1 0.2 0.2];
 
-%%--- plot
-plot_intv = 10; %--- plot interval
-idx1 = [1:plot_intv:size(fval1,1)-1, size(fval1,1)];
-idx2 = [1:plot_intv:size(fval2,1)-1, size(fval2,1)];
-idx3 = [1:plot_intv:size(fval3,1)-1, size(fval3,1)];
-idx4 = [1:plot_intv:size(fval4,1)-1, size(fval4,1)];
-idx5 = [1:plot_intv:size(fval5,1)-1, size(fval5,1)];
-
 %%--- figure: num. func eval - relative cost
 figure(1)
-plot(func_eval1(idx1), fval1(idx1), '-o', 'color',blue,'linewidth',2,'MarkerSize',7);
+plot(func_eval1, fval1, '-o', 'color',blue,'linewidth',2,'MarkerSize',7,'MarkerIndices',[1:10:size(fval1,1)-1, size(fval1,1)]);
 hold on
-plot(func_eval2(idx2), fval2(idx2), '--+', 'color',red,'linewidth',2,'MarkerSize',7);
-plot(func_eval3(idx3), fval3(idx3), '-.d', 'color',orange,'linewidth',2,'MarkerSize',7);
-plot(func_eval4(idx4), fval4(idx4), '--^', 'color',cyan,'linewidth',2,'MarkerSize',7);
-plot(func_eval5(idx5), fval5(idx5), '-v', 'color',green,'linewidth',2,'MarkerSize',7);
+plot(func_eval2, fval2, '--+', 'color',red,'linewidth',2,'MarkerSize',7,'MarkerIndices',[1:10:size(fval2,1)-1, size(fval2,1)]);
+plot(func_eval3, fval3, '-.d', 'color',orange,'linewidth',2,'MarkerSize',7,'MarkerIndices',[1:10:size(fval3,1)-1, size(fval3,1)]);
+plot(func_eval4, fval4, '--^', 'color',cyan,'linewidth',2,'MarkerSize',7,'MarkerIndices',[1:10:size(fval4,1)-1, size(fval4,1)]);
+plot(func_eval5, fval5, '-v', 'color',green,'linewidth',2,'MarkerSize',7,'MarkerIndices',[1:10:size(fval5,1)-1, size(fval5,1)]);
 plot(func_eval6, fval6, '-.s', 'color',brown,'linewidth',2,'MarkerSize',7);
 
 h1=legend('nlTGCR (m=1)', ...
@@ -144,4 +136,3 @@ set(gca,'FontSize',16)
 xlabel('Function evaluation')
 ylabel('Cost: ||f(x)||_2/||f(x_0)||_2')
 xlim([0 300])
-%ylim([1e-10 1])

@@ -53,26 +53,16 @@ fval3 = fval3/fval3(1);
 
 %% ------ plot
 %%--- define color
-cyan        = [0.2 0.8 0.8];
-brown       = [0.8 0.1 0.1];
 orange      = [1 0.5 0];
 blue        = [0 0.5 1];
-green       = [0 0.6 0.3];
 red         = [1 0.2 0.2];
-black       = [0 0 0];
 
 %%--- figure 1: iteration - relative cost
-plot_intv = 20; %--- plot interval
-idx1 = [1:plot_intv:size(fval1,1)-1, size(fval1,1)];
-idx2 = [1:plot_intv:size(fval2,1)-1, size(fval2,1)];
-idx3 = [1:plot_intv:size(fval3,1)-1, size(fval3,1)];
-
-
 figure(1)
-plot(idx1, fval1(idx1), '-o', 'color',blue,'linewidth',2,'MarkerSize',7);
+plot(0:length(fval1)-1, fval1, '-o', 'color',blue,'linewidth',2,'MarkerSize',7,'MarkerIndices',[1:20:size(fval1,1)-1, size(fval1,1)]);
 hold on
-plot(idx2, fval2(idx2), '--v', 'color',red,'linewidth',2,'MarkerSize',7);
-plot(idx3, fval3(idx3), '-.^', 'color',orange,'linewidth',2,'MarkerSize',7);
+plot(0:length(fval2)-1, fval2, '--v', 'color',red,'linewidth',2,'MarkerSize',7,'MarkerIndices',[1:20:size(fval2,1)-1, size(fval2,1)]);
+plot(0:length(fval3)-1, fval3, '-.^', 'color',orange,'linewidth',2,'MarkerSize',7,'MarkerIndices',[1:20:size(fval3,1)-1, size(fval3,1)]);
 
 h1=legend('nlTGCR','nlTGCR linear','nlTGCR adaptive');
 set(gca,'YScale','log');
@@ -82,16 +72,14 @@ set(gcf,'paperpositionmode','auto')
 set(gca,'FontSize',16)
 xlabel('Iteration')
 ylabel('Cost: ||f(x)||_2/||f(x_0)||_2')
-%xlim([0 1001])
 ylim([1e-16 1])
-%grid on
 
 %%--- figure 2: num. func eval - relative cost
 figure(2)
-plot(func_eval1(idx1), fval1(idx1), '-o', 'color',blue,'linewidth',2,'MarkerSize',7);
+plot(func_eval1, fval1, '-o', 'color',blue,'linewidth',2,'MarkerSize',7,'MarkerIndices',[1:20:size(fval1,1)-1, size(fval1,1)]);
 hold on
-plot(func_eval2(idx2), fval2(idx2), '--v', 'color',red,'linewidth',2,'MarkerSize',7);
-plot(func_eval3(idx3), fval3(idx3), '-.^', 'color',orange,'linewidth',2,'MarkerSize',7);
+plot(func_eval2, fval2, '--v', 'color',red,'linewidth',2,'MarkerSize',7,'MarkerIndices',[1:20:size(fval2,1)-1, size(fval2,1)]);
+plot(func_eval3, fval3, '-.^', 'color',orange,'linewidth',2,'MarkerSize',7,'MarkerIndices',[1:20:size(fval3,1)-1, size(fval3,1)]);
 
 h1=legend('nlTGCR','nlTGCR linear','nlTGCR adaptive');
 set(gca,'YScale','log');
@@ -101,6 +89,4 @@ set(gcf,'paperpositionmode','auto')
 set(gca,'FontSize',16)
 xlabel('Function evaluation')
 ylabel('Cost: ||f(x)||_2/||f(x_0)||_2')
-%xlim([0 1001])
 ylim([1e-16 1])
-%grid on
