@@ -57,18 +57,18 @@ cudnn.benchmark = True
 
 
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(net.parameters(), lr=0.1,
-                      momentum=0.9)
+# optimizer = optim.SGD(net.parameters(), lr=0.1,
+#                       momentum=0.9)
 # optimizer = optim.Adam(net.parameters(), lr=1e-3, weight_decay=5e-4)
-# optimizer = NLTGCR(
-#                  net.parameters(),
-#                  lr= 0.5,
-#                  max_iter=1,
-#                  max_eval=999,
-#                  restart=100,
-#                  history_size=5,
-#                  strategy=None,
-#             )
+optimizer = NLTGCR(
+                 net.parameters(),
+                 lr= 0.5,
+                 max_iter=1,
+                 max_eval=999,
+                 restart=100,
+                 history_size=5,
+                 strategy=None,
+            )
 scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=100)
 
 
