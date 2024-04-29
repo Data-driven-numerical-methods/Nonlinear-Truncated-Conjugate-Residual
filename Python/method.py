@@ -4,7 +4,7 @@ from torch.optim.optimizer import Optimizer
 from torch.nn.functional import normalize
 
 
-device = 'cuda'
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 def _cubic_interpolate(x1, f1, g1, x2, f2, g2, bounds=None):
     # ported from https://github.com/torch/optim/blob/master/polyinterp.lua
     # Compute bounds of interpolation area
