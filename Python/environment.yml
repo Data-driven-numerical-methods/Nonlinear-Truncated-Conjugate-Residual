@@ -1,0 +1,35 @@
+name: cuda116
+channels:
+  - soumith
+  - defaults
+dependencies:
+  - python=3.7
+  - torchvision
+  - pytorch
+  - pytorch-cuda=11.6
+  - spyder-kernels
+  - matplotlib
+  - scikit-learn
+  - pytorch-metric-learning
+  - seaborn
+  - pot
+  - openpyxl
+  - notebook
+  - jupyter
+  - umap-learn
+  - eli5
+  - pyreadr
+  - rdata
+  - libstdcxx-ng=12
+  - tensorboard
+  - yaml
+  - leidenalg
+  - python-igraph
+  - scanpy
+  - h5py
+  - cython
+  - anndata
+  - pyg
+  - wget
+  - fastprogress
+prefix: /home/huan/anaconda3/envs/cuda116
