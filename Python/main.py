@@ -163,7 +163,7 @@ for rr in range(5):
     assert(len(w) ==sum_G)
     d = len(w)
     lb= 1
-    device = 'cuda'
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     P = torch.zeros((d, lb), requires_grad=False).to(device)
     AP = torch.zeros((d,lb), requires_grad=False).to(device)
     reload(w)
